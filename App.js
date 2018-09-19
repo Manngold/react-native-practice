@@ -1,62 +1,98 @@
-import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
-import AppNavigator from './navigation/AppNavigator';
+import React, { Component } from 'react';
+import { ActivityIndicator, View, Text, StyleSheet, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
+import { black } from 'ansi-colors';
 
-export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
-
-  render() {
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-      return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
-      );
+export default class App extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            refreshing: false,
+        };
     }
-  }
 
-  _loadResourcesAsync = async () => {
-    return Promise.all([
-      Asset.loadAsync([
-        require('./assets/images/robot-dev.png'),
-        require('./assets/images/robot-prod.png'),
-      ]),
-      Font.loadAsync({
-        // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-      }),
-    ]);
-  };
-
-  _handleLoadingError = error => {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error);
-  };
-
-  _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
-  };
+    _onRefresh = () => {
+        this.setState({refreshing: true}, 2000, () => {
+            this.setState({refreshing: false});
+        });
+    }
+    render(){
+        let homeImg = {
+            uri: require('./assets/images/homebody.png'),
+        }
+        return(
+            <View style={styles.container}>
+                <ScrollView refreshing={this.state.refreshing} onRefresh={this._onRefresh}>
+                    <View style={styles.topIcon}>
+                        <Ionicons style={styles.menuIcon} name="md-menu" size={45} color="#307CBF"/>
+                        <Ionicons style={styles.addIcon} name="ios-person-add" size={45} color="#307CBF"/>
+                    </View>
+                    <View style={styles.bodyContainer}>
+                        <Image source={homeImg.uri} style={styles.bodyContainer}/>
+                    </View> 
+                </ScrollView>
+                <View style={styles.staticContainer}>
+                    <Ionicons style={styles.staticIcon} name="md-body" size={45} color="#3E3E3E"/>
+                    <View style={styles.gagueBar}></View>
+                    <View style={styles.textBox}><Text>70%</Text></View>
+                </View>
+                <View style={styles.staticContainer}>
+                    <Ionicons style={styles.staticIcon} name="md-water" size={45} color="#307CBF"/>
+                    <View style={styles.gagueBar}></View>
+                    <View style={styles.textBox}><Text>70%</Text></View>
+                </View>
+                <View style={styles.staticContainer}>
+                    <Ionicons style={styles.staticIcon} name="ios-water-outline" size={45} color="black"/>
+                    <View style={styles.gagueBar}></View>
+                    <View style={styles.textBox}><Text>70%</Text></View>
+                </View>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+    container: {
+        flex: 1,
+    },
+    topIcon: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    menuIcon: {
+        marginLeft: 20,
+        marginTop: 30,
+    },
+    addIcon: {
+        marginRight: 20,
+        marginTop: 30,
+    },
+    bodyContainer: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 30,
+    },
+    staticContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    staticIcon: {
+        marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 20,
+    },
+    gagueBar: {
+        marginTop: 10,
+        marginBottom: 10,
+        width: 200,
+        height: 30,
+        backgroundColor: "black",
+        borderRadius: 5,
+    },
+    textBox: {
+        marginTop: 17,
+        marginRight: 30
+    }
+})

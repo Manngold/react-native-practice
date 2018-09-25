@@ -1,98 +1,75 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import Button from 'react-native-button';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
-import { black } from 'ansi-colors';
+import { createStackNavigator } from 'react-navigation';
+import { NewPatientScreen } from './screens/NewPatient';
+import { ExistingPatientScreen } from './screens/ExistingPatient';
 
-export default class App extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            refreshing: false,
-        };
-    }
-
-    _onRefresh = () => {
-        this.setState({refreshing: true}, 2000, () => {
-            this.setState({refreshing: false});
-        });
-    }
+export class HomeScreen extends Component {
     render(){
-        let homeImg = {
-            uri: require('./assets/images/homebody.png'),
-        }
-        return(
-            <View style={styles.container}>
-                <ScrollView refreshing={this.state.refreshing} onRefresh={this._onRefresh}>
-                    <View style={styles.topIcon}>
-                        <Ionicons style={styles.menuIcon} name="md-menu" size={45} color="#307CBF"/>
-                        <Ionicons style={styles.addIcon} name="ios-person-add" size={45} color="#307CBF"/>
-                    </View>
-                    <View style={styles.bodyContainer}>
-                        <Image source={homeImg.uri} style={styles.bodyContainer}/>
-                    </View> 
-                </ScrollView>
-                <View style={styles.staticContainer}>
-                    <Ionicons style={styles.staticIcon} name="md-body" size={45} color="#3E3E3E"/>
-                    <View style={styles.gagueBar}></View>
-                    <View style={styles.textBox}><Text>70%</Text></View>
-                </View>
-                <View style={styles.staticContainer}>
-                    <Ionicons style={styles.staticIcon} name="md-water" size={45} color="#307CBF"/>
-                    <View style={styles.gagueBar}></View>
-                    <View style={styles.textBox}><Text>70%</Text></View>
-                </View>
-                <View style={styles.staticContainer}>
-                    <Ionicons style={styles.staticIcon} name="ios-water-outline" size={45} color="black"/>
-                    <View style={styles.gagueBar}></View>
-                    <View style={styles.textBox}><Text>70%</Text></View>
+            return (
+        <View style={styles.mainBox}>
+                <Text style={styles.titleText}>Smart Belt</Text>
+                <Ionicons name="md-heart" size={80} color="red"/>
+                <Text>Check Your Body</Text>
+                <View style={styles.buttonBox}>
+                        <Button 
+                            containerStyle={{backgroundColor: "#4B8FF1", borderRadius: 90, height: 100, 
+                                            width: 100, justifyContent: 'center', alignItems: 'center',
+                                            marginTop: 30, marginLeft: 20}}
+                            style={{color: 'white'}} 
+                            onPress={() => this.props.navigation.navigate('NewPatient')}>New Patient</Button>
+                            
+                        <Button 
+                        containerStyle={{backgroundColor: "#3A28BE", borderRadius: 90, height: 100, 
+                                         width: 100, justifyContent: 'center', alignItems: 'center',
+                                         marginTop: 30, marginLeft: 20}}
+                        style={{color: 'white'}}
+                        onPress={() => this.props.navigation.navigate('ExistingPatient')}>Existing Patient</Button>
                 </View>
             </View>
-        );
+        )
+    }
+}
+
+const RootStack = createStackNavigator({
+    Home: HomeScreen,
+    NewPatient: NewPatientScreen,
+    ExistingPatient: ExistingPatientScreen,
+},
+{
+    initialRouteName: 'Home',
+}
+);
+
+export default class App extends Component {
+    render() {
+        return <RootStack />;
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    mainBox: {
         flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'white',
     },
-    topIcon: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+    titleText: {
+        fontSize: 50,
     },
-    menuIcon: {
-        marginLeft: 20,
-        marginTop: 30,
+    buttonBox: {
+        flexDirection: 'row',   
     },
-    addIcon: {
-        marginRight: 20,
-        marginTop: 30,
+    newBtn: {
+        backgroundColor: "#078C95",
+        color: 'white',
+        borderRadius: 50
     },
-    bodyContainer: {
-        flex: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 30,
-    },
-    staticContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    staticIcon: {
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 20,
-    },
-    gagueBar: {
-        marginTop: 10,
-        marginBottom: 10,
-        width: 200,
-        height: 30,
-        backgroundColor: "black",
-        borderRadius: 5,
-    },
-    textBox: {
-        marginTop: 17,
-        marginRight: 30
-    }
+    existBtn: {
+        backgroundColor: "#101377",
+        color: 'white',
+        borderRadius: 50,    
+    }   
 })

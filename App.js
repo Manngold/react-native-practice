@@ -33,7 +33,7 @@ export class HomeScreen extends Component {
     }
 }
 
-const RootStack = createStackNavigator({
+export const RootStack = createStackNavigator({
     Home: HomeScreen,
     NewPatient: NewPatientScreen,
     ExistingPatient: ExistingPatientScreen,

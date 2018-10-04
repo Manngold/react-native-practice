@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation';
 import { NewPatientScreen } from './screens/NewPatient';
 import { ExistingPatientScreen } from './screens/ExistingPatient';
+import { CheckBodyScreen } from './screens/CheckBody';
 
 export class HomeScreen extends Component {
     render(){
@@ -37,6 +38,7 @@ export const RootStack = createStackNavigator({
     Home: HomeScreen,
     NewPatient: NewPatientScreen,
     ExistingPatient: ExistingPatientScreen,
+    CheckBody: CheckBodyScreen,
 },
 {
     initialRouteName: 'Home',

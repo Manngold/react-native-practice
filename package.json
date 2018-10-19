@@ -21,7 +21,9 @@
     "react-native-elements": "^0.19.1",
     "react-native-keyboard-aware-scroll-view": "^0.7.2",
     "react-native-shaking-text": "^0.1.0",
-    "react-navigation": "^2.14.2"
+    "react-native-svg": "^7.1.2",
+    "react-navigation": "^2.14.2",
+    "victory-native": "^30.4.0"
   },
   "devDependencies": {
     "jest-expo": "30.0.0"
